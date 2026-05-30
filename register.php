@@ -6,6 +6,7 @@
     <title>Contact Form</title>
     <link rel="stylesheet" href="/Blog_Site/registerStyle.css">
 </head>
+
 <body>
 
     <div class="container">
@@ -30,6 +31,15 @@
                     id="email"
                     name="email"
                     placeholder="Enter your email"
+                    required
+                >
+
+                <label for="password">password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
                     required
                 >
             </div>
