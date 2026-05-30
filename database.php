@@ -6,14 +6,6 @@
 
 3. Use if and else condition to check connection. -->
 
-
-
-
-
-
-
-
-
 <?php
 use Dom\Sqlite;
 

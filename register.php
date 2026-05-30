@@ -1,6 +1,6 @@
 <?php
 
-if(isset($_POST['submit'])){
+if(isset($_POST['Register'])){
 
 //Storing the input from the user
 $name= $_POST['name'];
@@ -84,8 +84,8 @@ $role= $_POST['role'];
             <option value="author">Author</option>
         </select>
 
-        <button id="submit" 
-        name="submit" type="submit">Submit</button>
+        <button id="Register" 
+        name="Register" type="Register">Register</button>
     </form>
 
 
