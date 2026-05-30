@@ -1,3 +1,51 @@
+<?php
+//connecting input to database
+
+    include "database.php";
+    session_start();
+    if(isset($_POST['login'])){
+
+    $email= $_POST['email'];
+    $password= $_POST['password'];
+    
+
+    $sql= "SELECT * FROM user WHERE email='$email'";
+
+    $result= mysqli_query($connection, $sql);
+
+    if(!$result){
+        echo" Error!! :{$connection->error}";
+
+    }
+
+    else{
+        if($result->num_rows>0){
+
+            echo"Successfully fetch the connection";
+        }
+    }
+
+    }
+
+
+
+
+?>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
 <form method="POST">
         <h2>Contact Form</h2>
 
@@ -18,6 +66,9 @@
         >
 
 
-        <button id="submit" 
-        name="submit" type="submit">Login</button>
+        <button id="login" 
+        name="login" type="login">Login</button>
     </form>
+    
+</body>
+</html>
