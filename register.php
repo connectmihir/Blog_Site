@@ -1,3 +1,18 @@
+<?php
+
+if(isset($_POST['submit'])){
+    $name= $_POST['name'];
+    $email= $_POST['email'];
+    $password= $_POST['password'];
+    $role= $_POST['role'];
+}
+
+?>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,54 +24,44 @@
 
 <body>
 
-    <div class="container">
-        <form class="contact-form">
-            <h2>Contact Form</h2>
+       <form action="/submit" method="POST">
+        <h2>Contact Form</h2>
 
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    placeholder="Enter your name"
-                    required
-                >
-            </div>
+        <label for="name">Name:</label>
+        <input
+            type="text"
+            id="name"
+            name="name"
+            required
+        >
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    required
-                >
+        <label for="email">Email:</label>
+        <input
+            type="email"
+            id="email"
+            name="email"
+            required
+        >
 
-                <label for="password">password</label>
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    placeholder="Enter your password"
-                    required
-                >
-            </div>
+        <label for="password">password:</label>
+        <input
+            type="password"
+            id="password"
+            name="password"
+            required
+        >
 
-            <div class="form-group">
-                <label for="role">Role</label>
-                <select id="role" name="role" required>
-                    <option value="">Select Role</option>
-                    <option value="subscriber">Subscriber</option>
-                    <option value="admin">Admin</option>
-                    <option value="author">Author</option>
-                </select>
-            </div>
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+            <option value="">Select Role</option>
+            <option value="subscriber">Subscriber</option>
+            <option value="admin">Admin</option>
+            <option value="author">Author</option>
+        </select>
 
-            <button type="submit">Submit</button>
-        </form>
-    </div>
+        <button type="submit">Submit</button>
+    </form>
+
 
 </body>
 </html>
