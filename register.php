@@ -1,10 +1,35 @@
 <?php
 
 if(isset($_POST['submit'])){
-    $name= $_POST['name'];
-    $email= $_POST['email'];
-    $password= $_POST['password'];
-    $role= $_POST['role'];
+
+//Storing the input from the user
+$name= $_POST['name'];
+$email= $_POST['email'];
+$password= $_POST['password'];
+$role= $_POST['role'];
+
+//connecting input to database
+
+    include "database.php";
+    session_start();
+
+    //Query variable
+
+    $sql="INSERT INTO user(name,email,password,role	) VALUES('$name','$email','$password','$role')";
+
+    //Applying quesry
+
+    $result= mysqli_query($connection, $sql);
+
+    if(!$result){
+        echo"Error in : {$connection->error}";
+    }
+
+    else{
+        echo"Successfully connected to database ";
+    }
+
+
 }
 
 ?>
@@ -24,7 +49,7 @@ if(isset($_POST['submit'])){
 
 <body>
 
-       <form action="/submit" method="POST">
+       <form method="POST">
         <h2>Contact Form</h2>
 
         <label for="name">Name:</label>
@@ -59,7 +84,8 @@ if(isset($_POST['submit'])){
             <option value="author">Author</option>
         </select>
 
-        <button type="submit">Submit</button>
+        <button id="submit" 
+        name="submit" type="submit">Submit</button>
     </form>
 
 
