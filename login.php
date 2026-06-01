@@ -20,6 +20,11 @@
 
     else{
         if($result->num_rows>0){
+            $row =mysqli_fetch_assoc($result);
+
+        $_SESSION['user_id']= $row['id'];
+        $_SESSION['user_name']= $row['name'];
+        $_SESSION['user_role']= $row['role'];
 
             echo"Successfully fetch the connection <a href='/PHP_PROJECT\Blog_Site\dashboard.php'> Click to visit your dashboard.</a>";
         }

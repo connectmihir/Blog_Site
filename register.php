@@ -8,14 +8,11 @@ $email= $_POST['email'];
 $password= $_POST['password'];
 $role= $_POST['role'];
 
-//connecting input to database
-
-    include "database.php";
-    session_start();
 
     //Query variable
 
     $sql="INSERT INTO user(name,email,password,role	) VALUES('$name','$email','$password','$role')";
+    include 'database.php';
 
     //Applying quesry
 
@@ -26,18 +23,13 @@ $role= $_POST['role'];
     }
 
     else{
-        echo"Successfully connected to database ";
+        echo"Successfully registerd!!,<a href= '\PHP_PROJECT\Blog_Site\login.php'> Click to login </a>";
     }
 
 
 }
 
 ?>
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
