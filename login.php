@@ -21,7 +21,7 @@
     else{
         if($result->num_rows>0){
 
-            echo"Successfully fetch the connection";
+            echo"Successfully fetch the connection <a href='/PHP_PROJECT\Blog_Site\dashboard.php'> Click to visit your dashboard.</a>";
         }
     }
 
