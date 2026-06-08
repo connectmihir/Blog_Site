@@ -37,8 +37,10 @@ else{
         
 
         else{
+
             
             header("Location: dashboard.php");
+        
         }
 
 
