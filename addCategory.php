@@ -3,8 +3,7 @@ session_start();
 
 include "database.php";
 
-if(!isset($_SESSION['user_role'])){
-    echo"Get the fuch off bitch!!! \n  u are not admin!";
+if(!isset($_SESSION['user_role'])){ 
     header("Location: login.php");
 }
 
@@ -12,15 +11,37 @@ else{
 
     if($_SESSION['user_role'] == "admin"){
         if(isset($_POST['submit'])){
+
+         //name variable will store the value of user 
             $name=$_POST['name'];
-            $sql= "INSERT INTO categories(name)  VALUES ('')";
+
+            //sql variable will store the sql query to insert into the table of categories.
+
+            $sql= "INSERT INTO categories(name)  VALUES ('$name')";
+
+            //Result will execute the query.
+
+            $result= mysqli_query($connection, $sql);
+            
+            //For checking the connections
+            if(!$result){
+                echo"ERROR!: {$connection->error}";
+                 }
+
+            else{
+                    echo"category added successfully";
+                }
+
         }
-        }
+    }
+        
 
         else{
             
             header("Location: dashboard.php");
         }
+
+
 }
 
 
