@@ -8,6 +8,17 @@ if(!isset($_SESSION['user_role'])){
     header("Location: login.php");
 }
 
+else{
+
+    if($_SESSION['user_role'] == "admin"){
+        echo "Only admin can access";
+        }
+
+        else{
+            
+            header("Location: dashboard.php");
+        }
+}
 
 
 
