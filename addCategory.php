@@ -3,6 +3,8 @@ session_start();
 
 include "database.php";
 
+//this is used for collecting info of user; if it does not get any user_role, because only admin can add and delete categgory.
+
 if(!isset($_SESSION['user_role'])){ 
     header("Location: login.php");
 }

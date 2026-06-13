@@ -1,3 +1,6 @@
+<!-- This used to create the database connections -->
+
+
 <!-- Steps to integrate database:
 1. Create neccessary varibles to store information about database.
 
@@ -14,7 +17,12 @@ $user="root";
 $password="";
 $dbname= "blog_site";
 
+
+// mysqli is a class which i created an object and stored in connection variable
+
 $connection =new mysqli($server,$user, $password, $dbname);
+
+//Now we check that did we created the object successfully.
 
 if(!$connection){
     echo"Error!!: {$connection->connect_error}";
