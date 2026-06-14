@@ -7,6 +7,7 @@ include "database.php";
 
 if(!isset($_SESSION['user_role'])){ 
     header("Location: login.php");
+    exit();
 }
 
 else{
@@ -61,8 +62,8 @@ else{
 </head>
 <body>
 
-<form method="POST   ">
-    <input type="name" name ="name">
+<form method="POST">
+    <input type="text" name ="name">
     <input type="submit" name ="submit" value= "Add category">
 </form>
     

@@ -24,11 +24,8 @@ $connection =new mysqli($server,$user, $password, $dbname);
 
 //Now we check that did we created the object successfully.
 
-if(!$connection){
-    echo"Error!!: {$connection->connect_error}";
+if ($connection->connect_error) {
+    die("Connection failed: " . $connection->connect_error);
 }
 
-else{
-    echo"Successfully connected to the database!!!!";
-}
 ?>
