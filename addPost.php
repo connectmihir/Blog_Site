@@ -54,14 +54,23 @@ if (!isset($_SESSION['user_id'])) {
 
                 $impl_fetch = mysqli_query($connection, $fetchCategory);
 
+
+                //*****************CRITICAL PART**************************
+
                // mysqli_fetch_assoc() converts the row into an associative array
                //This accesses the id key from the associative array. 
+               //It converts only one row at a time from the query result into an associative array.
 
                 if ($impl_fetch->num_rows > 0) {
                     $row = mysqli_fetch_assoc($impl_fetch);
                     $category_id = $row['id'];
                 }
 
+                else {
+                        die("Category not found");
+                    }
+
+//Get all the data and store into the database
 
                 $user_submission = "INSERT INTO post(title, content, image,  category_id,    author_id) VALUES('$title','$description','$image','$category_id', '$user_id')";
 
