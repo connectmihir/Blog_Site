@@ -12,8 +12,8 @@ $Result= mysqli_query($connection, $sql);
 
 while($row= mysqli_fetch_assoc($Result)){
     echo"{$row['Titile']}<br>";
-    echo"{$row['description']}<br>";
-    echo"{$row['image']}<br>";
+    echo"{$row['content']}<br>";
+    echo"<img src="/Blog_Site/Image/{$row['image']}" alt=""><br><hr>";
 }
 
 
