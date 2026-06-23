@@ -5,14 +5,19 @@ session_start();
 
 include "database.php";
 
-// step-1 check the user is login or not?
-
+if (isset($_GET['post_id'])) {
+    $post_id = $_GET['post_id'];
+    } 
+    else {
+        die("Post ID is missing.");
+        }
+        
+        // step-1 check the user is login or not?
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     
     } else { 
         
-        $post_id= $_GET['post_id'];
 // step-2 Check the User access privilage
 
 //Only for Admin and Author
@@ -74,7 +79,13 @@ if (!isset($_SESSION['user_id'])) {
 
 //Get all the data and store into the database
 
-                $user_submission = "INSERT INTO post(title, content, image,  category_id,    author_id) VALUES('$title','$description','$image','$category_id', '$user_id')";
+               $user_submission = "UPDATE post 
+                    SET title = '$title',
+                        content = '$description',
+                        image = '$image',
+                        category_id = '$category_id',
+                        author_id = '$user_id'
+                    WHERE post_id = '$post_id'";
 
                 $impl_submission = mysqli_query($connection, $user_submission);
 
