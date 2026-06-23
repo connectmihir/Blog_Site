@@ -128,7 +128,7 @@ if (!isset($_SESSION['user_id'])) {
         <br>
         <br>
 
-        <input type="submit" name="submit" value="Add Post">
+        <input type="submit" name="submit" value="update Post">
 
 
     </form>
