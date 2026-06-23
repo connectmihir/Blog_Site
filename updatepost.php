@@ -90,7 +90,7 @@ if (!isset($_SESSION['user_id'])) {
                 $impl_submission = mysqli_query($connection, $user_submission);
 
                 if ($impl_submission) {
-                    echo "Post Uploaded SuccessFully";
+                    echo "Post Updated Successfully";
                 }
             }
         }
@@ -113,7 +113,7 @@ if (!isset($_SESSION['user_id'])) {
 
 <body>
 
-    <form action="addPost.php" method="post" enctype="multipart/form-data">
+    <form action="updatepost.php?post_id=<?php echo $post_id; ?>" method="post" enctype="multipart/form-data">
 
         <input type="text" name="title" placeholder="Insert Title"><br><br>
         <textarea name="description" placeholder="Write Description"></textarea><br><br>
