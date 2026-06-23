@@ -16,7 +16,7 @@ while($row= mysqli_fetch_assoc($Result)){
     echo"<img src='Image/{$row['image']}'><br><hr>";
 
     echo"<a href='updatepost.php?post_id={$row['id']}'>Update the post!!</a> <br>";
-    echo"<a href='deletepost.php'>Delete the post!!</a> <br>";
+    echo"<a href='deletepost.php?post_id={$row['id']}'>Delete the post!!</a> <br>";
     // echo""<a href="">Delete the post!!</a> <br>
 
 }

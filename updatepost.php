@@ -85,7 +85,7 @@ if (!isset($_SESSION['user_id'])) {
                         image = '$image',
                         category_id = '$category_id',
                         author_id = '$user_id'
-                    WHERE post_id = '$post_id'";
+                    WHERE id = '$post_id'";
 
                 $impl_submission = mysqli_query($connection, $user_submission);
 
