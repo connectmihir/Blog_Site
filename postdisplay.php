@@ -44,10 +44,7 @@ while($row= mysqli_fetch_assoc($Result)){
 <button id="login" 
         name="insert_comment" >Insert Comment</button>
 
-
-
-
-</form>
+    </form>
     
 </body>
 </html>
