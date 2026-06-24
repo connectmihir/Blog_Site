@@ -84,6 +84,7 @@ if (!isset($_SESSION['user_id'])) {
     } else {
         echo "You are not authorized to access this page.";
         header("Location: login.php");
+        exit();
     }
 }
 
