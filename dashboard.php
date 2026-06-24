@@ -9,6 +9,9 @@ else{
 // it just print the data from the server which we stored in the server from the login page.
 
     echo"WElcome user:{$_SESSION['user_name']} and your role is:{$_SESSION['user_role']}";
+
+
+    echo"<br><a href='postdisplay.php'>View the blog post!!</a>" ;
 }
 
 

@@ -6,6 +6,15 @@ session_start();
 
 include "database.php";
 
+if(isset($_SESSION['user_name'])){
+    $user_name=$_SESSION['user_name'];
+}
+
+else{
+    header("location: dashboard.php");
+    exit();
+}
+
 $sql= "select * from post";
 
 $Result= mysqli_query($connection, $sql);
@@ -34,7 +43,7 @@ while($row= mysqli_fetch_assoc($Result)){
 </head>
 <body>
 
-<form action="postdisplay.php">
+<form action="postdisplay.php?user_name=$user_name">
 
 
 <textarea name="comment" placeholder="We love to hear you and learn from you!!">
