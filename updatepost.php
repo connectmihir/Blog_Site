@@ -15,6 +15,7 @@ if (isset($_GET['post_id'])) {
         // step-1 check the user is login or not?
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
+    exit();
     
     } else { 
         
@@ -97,6 +98,7 @@ if (!isset($_SESSION['user_id'])) {
     } else {
         echo "You are not authorized to access this page.";
         header("Location: login.php");
+        exit();
     }
 }
 
