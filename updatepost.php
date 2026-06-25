@@ -1,143 +1,226 @@
 <?php
-
-
 session_start();
-
 include "database.php";
 
-if (isset($_GET['post_id'])) {
-    $post_id = $_GET['post_id'];
-    } 
-    else {
-        die("Post ID is missing.");
-        }
-        
-        // step-1 check the user is login or not?
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
-    
-    } else { 
-        
-// step-2 Check the User access privilage
-
-//Only for Admin and Author
-    if (in_array($_SESSION['user_role'], ['author', 'admin'])) {
-        $user_id = $_SESSION['user_id'];//it will help u to identity in databse which user add the post from the user id.
-
-        //Now below SQL command u do to fetch the category from the user
-
-        $sql = "SELECT * FROM categories";
-        $result = mysqli_query($connection, $sql);
-
-        //To check the connection status that successfully fetch the category from the database
-
-        if (!$result) {
-            die("Connection failed: " . $connection->connect_error);
-        } else {
-
-        //store the user input of add post section 
-
-            if (isset($_POST['submit'])) {
-                $title = $_POST['title'];
-                $description = $_POST['description'];
-                $category = $_POST['category'];
-                //name variable will store the name of the image
-                $image = $_FILES['image']['name'];
-                //temp_location variable will store the address of the image
-                $temp_location = $_FILES['image']['tmp_name'];
-                $our_location = "Image/";
- 
-                //then i move the temp_location to our desire loacation with name.
-
-                if (!empty($image)) {
-                    move_uploaded_file($temp_location, $our_location . $image);
-                }
-
-                //before We just store the category name from the  user. Now we need to identitfy the category id
-
-                $fetchCategory = "SELECT * FROM categories WHERE NAME='$category'";
-
-                //implement the above sql query
-
-                $impl_fetch = mysqli_query($connection, $fetchCategory);
-
-
-                //*****************CRITICAL PART**************************
-
-               // mysqli_fetch_assoc() converts the row into an associative array
-               //This accesses the id key from the associative array. 
-               //It converts only one row at a time from the query result into an associative array.
-
-                if ($impl_fetch->num_rows > 0) {
-                    $row = mysqli_fetch_assoc($impl_fetch);
-                    $category_id = $row['id'];
-                }
-
-                else {
-                        die("Category not found");
-                    }
-
-//Get all the data and store into the database
-
-               $user_submission = "UPDATE post 
-                    SET title = '$title',
-                        content = '$description',
-                        image = '$image',
-                        category_id = '$category_id',
-                        author_id = '$user_id'
-                    WHERE id = '$post_id'";
-
-                $impl_submission = mysqli_query($connection, $user_submission);
-
-                if ($impl_submission) {
-                    echo "Post Updated Successfully";
-                }
-            }
-        }
-    } else {
-        echo "You are not authorized to access this page.";
-        header("Location: login.php");
-        exit();
-    }
 }
 
+if (!in_array($_SESSION['user_role'], ['author', 'admin'])) {
+    header("Location: dashboard.php");
+    exit();
+}
+
+if (!isset($_GET['post_id'])) {
+    header("Location: postdisplay.php");
+    exit();
+}
+
+$post_id = $_GET['post_id'];
+$success_message = "";
+$error_message = "";
+
+/* Fetch categories */
+$category_sql = "SELECT * FROM categories ORDER BY name ASC";
+$category_result = mysqli_query($connection, $category_sql);
+
+/* Fetch current post data */
+$post_sql = "SELECT * FROM post WHERE id='$post_id'";
+$post_result = mysqli_query($connection, $post_sql);
+
+if (mysqli_num_rows($post_result) == 0) {
+    header("Location: postdisplay.php");
+    exit();
+}
+
+$post = mysqli_fetch_assoc($post_result);
+
+/* Update post */
+if (isset($_POST['update_post'])) {
+
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+    $category_id = $_POST['category_id'];
+
+    $image = $post['image'];
+
+    /* If user uploads a new image */
+    if (!empty($_FILES['image']['name'])) {
+
+        $image = $_FILES['image']['name'];
+        $temp_location = $_FILES['image']['tmp_name'];
+        $image_location = "Image/" . $image;
+
+        move_uploaded_file($temp_location, $image_location);
+    }
+
+    $update_sql = "UPDATE post 
+                   SET title='$title',
+                       content='$content',
+                       image='$image',
+                       category_id='$category_id'
+                   WHERE id='$post_id'";
+
+    $update_result = mysqli_query($connection, $update_sql);
+
+    if ($update_result) {
+        $_SESSION['success_message'] = "Post updated successfully.";
+        header("Location: postdisplay.php");
+        exit();
+    } else {
+        $error_message = "Update failed: " . $connection->error;
+    }
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add_Post</title>
+    <title>Update Post | BlogSpace</title>
+
+    <link rel="stylesheet" href="updatepost.css">
     <link rel="stylesheet" href="header.css">
 </head>
 
 <body>
-    <?php include "header.php"; ?>
 
-    <form action="updatepost.php?post_id=<?php echo $post_id; ?>" method="post" enctype="multipart/form-data">
+<?php include "header.php"; ?>
 
-        <input type="text" name="title" placeholder="Insert Title"><br><br>
-        <textarea name="description" placeholder="Write Description"></textarea><br><br>
-        <select name="category" id="category">
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+<main class="update-page">
 
-                <option value="<?php echo "{$row['name']}"; ?>"><?php echo "{$row['name']}"; ?> </option> <?php } ?>
+    <section class="update-container">
 
-        </select><br><br>
+        <div class="update-heading">
+            <p class="page-tag">CONTENT MANAGEMENT</p>
+            <h1>Update Blog Post</h1>
+            <p>Edit your post details and publish the latest version.</p>
+        </div>
 
-        <input type="file" name="image">
-        <br>
-        <br>
+        <?php if ($error_message != "") { ?>
+            <div class="error-message">
+                <?php echo $error_message; ?>
+            </div>
+        <?php } ?>
 
-        <input type="submit" name="submit" value="update Post">
+        <form action="" method="POST" enctype="multipart/form-data" class="update-form">
 
+            <div class="form-grid">
 
-    </form>
+                <div class="form-main">
+
+                    <div class="form-group">
+                        <label for="title">Post title</label>
+
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            value="<?php echo htmlspecialchars($post['title']); ?>"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="content">Post content</label>
+
+                        <textarea
+                            id="content"
+                            name="content"
+                            rows="12"
+                            required
+                        ><?php echo htmlspecialchars($post['content']); ?></textarea>
+                    </div>
+
+                </div>
+
+                <aside class="form-sidebar">
+
+                    <div class="sidebar-card">
+
+                        <h2>Post settings</h2>
+
+                        <div class="form-group">
+                            <label for="category_id">Category</label>
+
+                            <select id="category_id" name="category_id" required>
+
+                                <?php while ($category = mysqli_fetch_assoc($category_result)) { ?>
+
+                                    <option
+                                        value="<?php echo $category['id']; ?>"
+                                        <?php
+                                        if ($category['id'] == $post['category_id']) {
+                                            echo "selected";
+                                        }
+                                        ?>
+                                    >
+                                        <?php echo htmlspecialchars($category['name']); ?>
+                                    </option>
+
+                                <?php } ?>
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="sidebar-card image-card">
+
+                        <h2>Featured image</h2>
+
+                        <?php if (!empty($post['image'])) { ?>
+                            <img
+                                class="current-image"
+                                src="Image/<?php echo htmlspecialchars($post['image']); ?>"
+                                alt="Current post image"
+                            >
+                        <?php } else { ?>
+                            <div class="no-image">
+                                No image uploaded
+                            </div>
+                        <?php } ?>
+
+                        <label class="file-label" for="image">
+                            Choose new image
+                        </label>
+
+                        <input
+                            type="file"
+                            id="image"
+                            name="image"
+                            accept="image/*"
+                        >
+
+                        <p class="file-help">
+                            Leave this empty if you want to keep the current image.
+                        </p>
+
+                    </div>
+
+                    <div class="action-buttons">
+
+                        <button type="submit" name="update_post" class="update-btn">
+                            Save Changes
+                        </button>
+
+                        <a href="postdisplay.php" class="cancel-btn">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
 
 </body>
-
 </html>
-
