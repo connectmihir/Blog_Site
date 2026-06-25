@@ -1,5 +1,6 @@
 <?php
 $message = "";
+$result = false;
 
 if (isset($_POST['Register'])) {
 
