@@ -4,17 +4,15 @@ session_start();
 
 include "database.php";
 
-if(!isset($SESSION['user_id'])){
-    header("location: login.php");
-    exit();
-}
-
-else{
+// if(!isset($SESSION['user_id'])){
+//     header("location: login.php");
+//     exit();
+// }
 
 if(isset($_POST['insert_comment'])){
 
      $id= $_SESSION['id'];
-     $post_id= $_SESSION['post_id'];
+     $post_id= $_POST['post_id'];
      $email= $_SESSION['email'];
      $user_name= $_SESSION['user_name'];
      $comment= $_POST['comment'];
@@ -25,16 +23,15 @@ if(isset($_POST['insert_comment'])){
 
   
 
- if($resultcomm){
-        echo"Error in : {$connection->error}";
- }
-
-
-
-
-
-}
+ if (!$resultcomm) {
+        echo "Error: " . mysqli_error($connection);
+    } else {
+        header("location: postdisplay.php");
+        exit();
+    }
 
 }
+
+
 
 ?>
