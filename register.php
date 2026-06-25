@@ -1,85 +1,123 @@
 <?php
+$message = "";
 
-if(isset($_POST['Register'])){
+if (isset($_POST['Register'])) {
 
-//Storing the input from the user
-$name= $_POST['name'];
-$email= $_POST['email'];
-$password= $_POST['password'];
-$role= $_POST['role'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $role = $_POST['role'];
 
+    include "database.php";
 
-    //Query variable
+    $sql = "INSERT INTO user(name, email, password, role)
+            VALUES('$name', '$email', '$password', '$role')";
 
-    $sql="INSERT INTO user(name,email,password,role	) VALUES('$name','$email','$password','$role')";
-    include 'database.php';
+    $result = mysqli_query($connection, $sql);
 
-    //Applying quesry
-
-    $result= mysqli_query($connection, $sql);
-
-    if(!$result){
-        echo"Error in : {$connection->error}";
+    if (!$result) {
+        $message = "Error: " . $connection->error;
+    } else {
+        $message = "Registration successful. You can now log in.";
     }
-
-    else{
-        echo"Successfully registerd!!,<a href= '\PHP_PROJECT\Blog_Site\login.php'> Click to login </a>";
-    }
-
-
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Form</title>
-    <link rel="stylesheet" href="/Blog_Site/registerStyle.css">
+    <title>Create Account</title>
+
+    <link rel="stylesheet" href="register.css">
 </head>
 
 <body>
 
-       <form method="POST">
-        <h2>Contact Form</h2>
+    <main class="register-page">
 
-        <label for="name">Name:</label>
-        <input
-            type="text"
-            id="name"
-            name="name"
-            required
-        >
+        <section class="register-card">
 
-        <label for="email">Email:</label>
-        <input
-            type="email"
-            id="email"
-            name="email"
-            required
-        >
+            <div class="register-header">
+                <p class="brand-name">BlogSpace</p>
+                <h1>Create your account</h1>
+                <p>Join the community and start sharing your ideas.</p>
+            </div>
 
-        <label for="password">password:</label>
-        <input
-            type="password"
-            id="password"
-            name="password"
-            required
-        >
+            <?php if ($message != "") { ?>
 
-        <label for="role">Role:</label>
-        <select id="role" name="role" required>
-            <option value="">Select Role</option>
-            <option value="subscriber">Subscriber</option>
-            <option value="admin">Admin</option>
-            <option value="author">Author</option>
-        </select>
+                <div class="message">
+                    <?php echo $message; ?>
 
-        <button id="Register" 
-        name="Register" type="Register">Register</button>
-    </form>
+                    <?php if ($result) { ?>
+                        <br>
+                        <a href="login.php">Go to Login</a>
+                    <?php } ?>
+                </div>
 
+            <?php } ?>
+
+            <form method="POST" class="register-form">
+
+                <div class="form-group">
+                    <label for="name">Full name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="Enter your full name"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Role</label>
+
+                    <select id="role" name="role" required>
+                        <option value="">Select your role</option>
+                        <option value="subscriber">Subscriber</option>
+                        <option value="author">Author</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+
+                <button id="Register" name="Register" type="submit">
+                    Create Account
+                </button>
+
+                <p class="login-text">
+                    Already have an account?
+                    <a href="login.php">Log in</a>
+                </p>
+
+            </form>
+
+        </section>
+
+    </main>
 
 </body>
 </html>

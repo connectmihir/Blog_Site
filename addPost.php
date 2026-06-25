@@ -98,30 +98,92 @@ if (!isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add_Post</title>
+    <link href="addpost.css" rel="stylesheet">
 </head>
 
 <body>
 
-    <form action="addPost.php" method="post" enctype="multipart/form-data">
+    <main class="add-post-page">
 
-        <input type="text" name="title" placeholder="Insert Title"><br><br>
-        <textarea name="description" placeholder="Write Description"></textarea><br><br>
-        <select name="category" id="category">
-            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+        <section class="add-post-card">
 
-                <option value="<?php echo "{$row['name']}"; ?>"><?php echo "{$row['name']}"; ?> </option> <?php } ?>
+            <div class="form-header">
+                <p class="brand-name">BlogSpace</p>
+                <h1>Create a new post</h1>
+                <p>Share an idea, update, or story with your readers.</p>
+            </div>
 
-        </select><br><br>
+            <?php if (isset($impl_submission) && $impl_submission) { ?>
+                <div class="success-message">
+                    Post uploaded successfully.
+                </div>
+            <?php } ?>
 
-        <input type="file" name="image">
-        <br>
-        <br>
+            <form class="add-post-form"
+                  action="addPost.php"
+                  method="post"
+                  enctype="multipart/form-data">
 
-        <input type="submit" name="submit" value="Add Post">
+                <div class="form-group">
+                    <label for="title">Post title</label>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        placeholder="Enter a clear post title"
+                        required
+                    >
+                </div>
 
+                <div class="form-group">
+                    <label for="description">Post description</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        placeholder="Write your post content here..."
+                        required
+                    ></textarea>
+                </div>
 
-    </form>
+                <div class="form-group">
+                    <label for="category">Category</label>
+
+                    <select name="category" id="category" required>
+                        <option value="">Select a category</option>
+
+                        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+                            <option value="<?php echo htmlspecialchars($row['name']); ?>">
+                                <?php echo htmlspecialchars($row['name']); ?>
+                            </option>
+                        <?php } ?>
+
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Featured image</label>
+
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept="image/*"
+                    >
+
+                    <small class="file-help">
+                        Upload a JPG, PNG, or WEBP image.
+                    </small>
+                </div>
+
+                <button type="submit" name="submit" class="submit-btn">
+                    Publish Post
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
 
 </body>
-
 </html>

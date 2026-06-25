@@ -1,68 +1,40 @@
 <?php
-//connecting input to database
+session_start();
+include "database.php";
 
-//A session lets you store data on the server and access it across multiple pages for the same user.
+$error_message = "";
 
-//This must usually be called before any HTML output is sent to the browser.
-// Without sessions, PHP treats each page request independently. Sessions allow you to remember information such as:
+if (isset($_POST['login'])) {
 
-// 1. Logged-in user details
-// 2. Shopping cart contents
-// 3. User preferences
-// 4. Temporary messages
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-// How it works
-// 1. session_start() creates or resumes a session.
-// 2. PHP generates or reads a session ID.
-// 3. The session ID is stored in a cookie (usually PHPSESSID).
-// 4. Session data is stored on the server and accessed through $_SESSION.
+    $sql = "SELECT * FROM user
+            WHERE email='$email'
+            AND password='$password'";
 
+    $result = mysqli_query($connection, $sql);
 
-// isset() is a PHP function that checks whether a variable exists and is not NULL.
+    if (!$result) {
+        $error_message = "Database error: " . $connection->error;
+    } else {
 
-    include "database.php";
-    session_start();
-    if(isset($_POST['login'])){
+        if (mysqli_num_rows($result) > 0) {
 
-    $email= $_POST['email'];
-    $password= $_POST['password'];
-    
-//$sql is the string variable which store query as a string
+            $row = mysqli_fetch_assoc($result);
 
-    $sql= "SELECT * FROM user WHERE email='$email'";
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['user_name'] = $row['name'];
+            $_SESSION['user_role'] = $row['role'];
 
-    $result= mysqli_query($connection, $sql);
+            header("Location: dashboard.php");
+            exit();
 
-    if(!$result){
-        echo" Error!! :{$connection->error}";
-
-    }
-
-    else{
-
-    //Fetched data is stored in the server.
-    // to share the information to other page
-        if($result->num_rows>0){
-            $row =mysqli_fetch_assoc($result);
-
-        $_SESSION['user_id']= $row['id'];
-        $_SESSION['user_name']= $row['name'];
-        $_SESSION['user_role']= $row['role'];
-
-            echo"Successfully fetch the connection <a href='/PHP_PROJECT\Blog_Site\dashboard.php'> Click to visit your dashboard.</a>";
-        }
-
-        else{
-            
-        echo"<a href='/Blog_Site/register.php'> Please register yourself</a>";
+        } else {
+            $error_message = "Invalid email or password. Please try again.";
         }
     }
-
-    }
-
-
-
-
+}
 ?>
 
 <!DOCTYPE html>
@@ -70,34 +42,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
+    <link rel="stylesheet" href="login.css">
 </head>
+
 <body>
 
+    <main class="login-page">
 
-<form method="POST">
-        <h2>Contact Form</h2>
+        <section class="login-card">
 
-        <label for="email">Email:</label>
-        <input
-            type="email"
-            id="email"
-            name="email"
-            required
-        >
+            <div class="login-header">
+                <p class="brand-name">BlogSpace</p>
+                <h1>Welcome back</h1>
+                <p>Log in to manage your posts and comments.</p>
+            </div>
 
-        <label for="password">password:</label>
-        <input
-            type="password"
-            id="password"
-            name="password"
-            required
-        >
+            <?php if ($error_message != "") { ?>
+                <div class="error-message">
+                    <?php echo $error_message; ?>
+                </div>
+            <?php } ?>
 
+            <form method="POST" class="login-form">
 
-        <button id="login" 
-        name="login" type="login">Login</button>
-    </form>
-    
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                    >
+                </div>
+
+                <button id="login" name="login" type="submit">
+                    Login
+                </button>
+
+                <p class="register-text">
+                    New here?
+                    <a href="register.php">Create an account</a>
+                </p>
+
+            </form>
+
+        </section>
+
+    </main>
+
 </body>
 </html>

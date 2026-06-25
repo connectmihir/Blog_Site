@@ -1,0 +1,120 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    color: #1f2937;
+}
+
+.dashboard-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+}
+
+.dashboard-card {
+    width: 100%;
+    max-width: 520px;
+    padding: 38px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.brand-name {
+    margin: 0 0 12px;
+    color: #2563eb;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    font-size: 30px;
+    color: #111827;
+}
+
+.dashboard-header p {
+    margin: 12px 0 0;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.role-badge {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 4px 9px;
+    border-radius: 20px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.dashboard-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dashboard-btn {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.primary-btn {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.primary-btn:hover {
+    background: #1d4ed8;
+}
+
+.secondary-btn {
+    background: #eef2ff;
+    color: #3730a3;
+}
+
+.secondary-btn:hover {
+    background: #e0e7ff;
+}
+
+.logout-btn {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.logout-btn:hover {
+    background: #fecaca;
+}
+
+@media (max-width: 480px) {
+    .dashboard-card {
+        padding: 28px 20px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 26px;
+    }
+}
