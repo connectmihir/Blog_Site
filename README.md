@@ -10,7 +10,7 @@ Watch the complete project demo here:
 
 https://youtu.be/9t-sDu2XbuM
 
-Repo link: 
+Repo link: https://github.com/connectmihir/Blog_Site
 
 ## Features
 
