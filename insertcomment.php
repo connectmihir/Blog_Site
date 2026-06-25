@@ -4,10 +4,10 @@ session_start();
 
 include "database.php";
 
-// if(!isset($SESSION['user_id'])){
-//     header("location: login.php");
-//     exit();
-// }
+if (!isset($_SESSION['user_id'])) {
+    header("location: login.php");
+    exit();
+}
 
 if(isset($_POST['insert_comment'])){
 

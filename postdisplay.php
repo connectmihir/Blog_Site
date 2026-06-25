@@ -62,6 +62,36 @@ $result = mysqli_query($connection, $sql);
 
     </form>
 
+    <?php
+    $comment_sql = "SELECT * FROM comment 
+                    WHERE post_id = '{$row['id']}' 
+                    ORDER BY id DESC";
+
+    $comment_result = mysqli_query($connection, $comment_sql);
+
+    while ($comment_row = mysqli_fetch_assoc($comment_result)) {
+    ?>
+
+        <div style="border: 1px solid black; padding: 10px; margin-top: 10px;">
+
+            <strong>
+                <?php echo $comment_row['user_name']; ?>
+            </strong>
+
+            <br>
+
+            <small>
+                <?php echo $comment_row['email']; ?>
+            </small>
+
+            <p>
+                <?php echo $comment_row['comment']; ?>
+            </p>
+
+        </div>
+
+    <?php } ?>
+
     <hr>
 
 <?php } ?>
