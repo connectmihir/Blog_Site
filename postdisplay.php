@@ -17,84 +17,119 @@ $result = mysqli_query($connection, $sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blogs</title>
+
+    <!-- External CSS file -->
+    <link rel="stylesheet" href="postdisplay.css">
 </head>
+
 <body>
 
-<?php while ($row = mysqli_fetch_assoc($result)) { ?>
+    <div class="blog-container">
 
-    <h2><?php echo $row['title']; ?></h2>
+        <h1 class="page-title">Latest Blogs</h1>
 
-    <p><?php echo $row['content']; ?></p>
+        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
 
-    <img src="Image/<?php echo $row['image']; ?>" width="300">
+            <article class="post-card">
 
-    <br><br>
+                <h2 class="post-title">
+                    <?php echo htmlspecialchars($row['title']); ?>
+                </h2>
 
-    <?php if (in_array($_SESSION['user_role'], ['author', 'admin'])) { ?>
+                <p class="post-content">
+                    <?php echo htmlspecialchars($row['content']); ?>
+                </p>
 
-        <a href="updatepost.php?post_id=<?php echo $row['id']; ?>">
-            Update the post
-        </a>
+                <img class="post-image"
+                     src="Image/<?php echo htmlspecialchars($row['image']); ?>"
+                     alt="<?php echo htmlspecialchars($row['title']); ?>">
 
-        <br>
+                <?php if (in_array($_SESSION['user_role'], ['author', 'admin'])) { ?>
 
-        <a href="deletepost.php?post_id=<?php echo $row['id']; ?>">
-            Delete the post
-        </a>
+                    <div class="post-actions">
 
-        <br><br>
+                        <a class="action-btn update-btn"
+                           href="updatepost.php?post_id=<?php echo $row['id']; ?>">
+                            Update Post
+                        </a>
 
-    <?php } ?>
+                        <a class="action-btn delete-btn"
+                           href="deletepost.php?post_id=<?php echo $row['id']; ?>"
+                           onclick="return confirm('Are you sure you want to delete this post?');">
+                            Delete Post
+                        </a>
 
-    <form action="insertcomment.php" method="POST">
+                    </div>
 
-        <input type="hidden" name="post_id" value="<?php echo $row['id']; ?>">
+                <?php } ?>
 
-        <textarea name="comment"
-                  placeholder="We love to hear from you and learn from you!"
-                  required></textarea>
+                <form class="comment-form" action="insertcomment.php" method="POST">
 
-        <br>
+                    <input type="hidden"
+                           name="post_id"
+                           value="<?php echo $row['id']; ?>">
 
-        <button type="submit" name="insert_comment">
-            Insert Comment
-        </button>
+                    <textarea name="comment"
+                              placeholder="Write your comment here..."
+                              required></textarea>
 
-    </form>
+                    <button class="comment-btn"
+                            type="submit"
+                            name="insert_comment">
+                        Post Comment
+                    </button>
 
-    <?php
-    $comment_sql = "SELECT * FROM comment 
-                    WHERE post_id = '{$row['id']}' 
-                    ORDER BY id DESC";
+                </form>
 
-    $comment_result = mysqli_query($connection, $comment_sql);
+                <h3 class="comments-heading">Comments</h3>
 
-    while ($comment_row = mysqli_fetch_assoc($comment_result)) {
-    ?>
+                <?php
+                $post_id = $row['id'];
 
-        <div style="border: 1px solid black; padding: 10px; margin-top: 10px;">
+                $comment_sql = "SELECT * FROM comment
+                                WHERE post_id = '$post_id'
+                                ORDER BY id DESC";
 
-            <strong>
-                <?php echo $comment_row['user_name']; ?>
-            </strong>
+                $comment_result = mysqli_query($connection, $comment_sql);
 
-            <br>
+                if (mysqli_num_rows($comment_result) > 0) {
 
-            <small>
-                <?php echo $comment_row['email']; ?>
-            </small>
+                    while ($comment_row = mysqli_fetch_assoc($comment_result)) {
+                ?>
 
-            <p>
-                <?php echo $comment_row['comment']; ?>
-            </p>
+                        <div class="comment-card">
 
-        </div>
+                            <strong class="comment-user">
+                                <?php echo htmlspecialchars($comment_row['user_name']); ?>
+                            </strong>
 
-    <?php } ?>
+                            <small class="comment-email">
+                                <?php echo htmlspecialchars($comment_row['email']); ?>
+                            </small>
 
-    <hr>
+                            <p class="comment-text">
+                                <?php echo htmlspecialchars($comment_row['comment']); ?>
+                            </p>
 
-<?php } ?>
+                        </div>
+
+                <?php
+                    }
+
+                } else {
+                ?>
+
+                    <p class="no-comments">
+                        No comments yet. Be the first to comment.
+                    </p>
+
+                <?php } ?>
+
+            </article>
+
+        <?php } ?>
+
+    </div>
 
 </body>
 </html>
