@@ -111,9 +111,11 @@ if (!isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add_Post</title>
+    <link rel="stylesheet" href="header.css">
 </head>
 
 <body>
+    <?php include "header.php"; ?>
 
     <form action="updatepost.php?post_id=<?php echo $post_id; ?>" method="post" enctype="multipart/form-data">
 

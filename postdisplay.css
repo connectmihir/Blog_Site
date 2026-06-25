@@ -4,177 +4,131 @@
 
 body {
     margin: 0;
-    padding: 40px 16px;
     font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    color: #1f2937;
+    background: #fbf3d9;
+    color: #071a42;
 }
 
-.blog-container {
-    max-width: 850px;
+.blog-section {
+    max-width: 1500px;
     margin: auto;
+    padding: 40px 70px 70px;
 }
 
-.page-title {
+.blog-heading {
     text-align: center;
-    margin-bottom: 30px;
-    font-size: 32px;
+    margin-bottom: 80px;
 }
 
-.post-card {
-    background: white;
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 28px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+.blog-heading h1 {
+    margin: 0;
+    font-size: 42px;
+    font-weight: 800;
+    color: #000000;
 }
 
-.post-title {
-    margin-top: 0;
-    margin-bottom: 12px;
-    font-size: 26px;
-    color: #111827;
+.blog-heading p {
+    margin-top: 35px;
+    font-size: 21px;
+    color: #071a42;
 }
 
-.post-content {
-    line-height: 1.7;
-    color: #4b5563;
-    margin-bottom: 18px;
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
 }
 
-.post-image {
-    width: 100%;
-    max-height: 400px;
-    object-fit: cover;
-    border-radius: 10px;
-    display: block;
-    margin-bottom: 20px;
-}
-
-.post-actions {
+.blog-card {
     display: flex;
-    gap: 10px;
-    margin-bottom: 22px;
+    flex-direction: column;
 }
 
-.action-btn {
-    display: inline-block;
-    padding: 9px 14px;
-    border-radius: 7px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: bold;
-    transition: 0.2s;
-}
-
-.update-btn {
-    background: #2563eb;
-    color: white;
-}
-
-.delete-btn {
-    background: #dc2626;
-    color: white;
-}
-
-.action-btn:hover {
-    opacity: 0.85;
-}
-
-.comment-form {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid #e5e7eb;
-}
-
-.comment-form textarea {
+.blog-image {
     width: 100%;
-    min-height: 100px;
-    resize: vertical;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 15px;
-    outline: none;
-}
-
-.comment-form textarea:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-}
-
-.comment-btn {
-    margin-top: 10px;
-    padding: 10px 16px;
-    border: none;
-    border-radius: 7px;
-    background: #16a34a;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.comment-btn:hover {
-    background: #15803d;
-}
-
-.comments-heading {
-    margin-top: 28px;
-    margin-bottom: 12px;
-    font-size: 20px;
-    color: #111827;
-}
-
-.comment-card {
-    background: #f9fafb;
-    border-left: 4px solid #2563eb;
-    border-radius: 6px;
-    padding: 14px;
-    margin-top: 12px;
-}
-
-.comment-user {
-    font-size: 15px;
-    color: #111827;
-}
-
-.comment-email {
+    height: 255px;
+    object-fit: cover;
     display: block;
-    margin-top: 4px;
-    font-size: 12px;
-    color: #6b7280;
 }
 
-.comment-text {
-    margin-bottom: 0;
-    line-height: 1.6;
-    color: #374151;
+.blog-content {
+    padding: 28px 28px 0;
+    text-align: center;
 }
 
-.no-comments {
-    color: #6b7280;
-    font-size: 14px;
+.blog-title {
+    margin: 0;
+    min-height: 95px;
+    font-size: 24px;
+    line-height: 1.22;
+    font-weight: 800;
+    color: #000000;
 }
 
-@media (max-width: 600px) {
-    body {
-        padding: 20px 12px;
+.blog-description {
+    min-height: 78px;
+    margin: 22px 0;
+    font-size: 18px;
+    line-height: 1.65;
+    color: #071a42;
+    text-align: left;
+}
+
+.learn-btn {
+    display: inline-block;
+    min-width: 190px;
+    padding: 15px 28px;
+    border: 4px solid #e6c45d;
+    border-radius: 35px;
+    background: #071a42;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 17px;
+    transition: 0.2s ease;
+}
+
+.learn-btn:hover {
+    transform: translateY(-3px);
+    background: #10295c;
+}
+
+@media (max-width: 1000px) {
+    .blog-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
-    .post-card {
-        padding: 18px;
+    .blog-section {
+        padding: 35px;
+    }
+}
+
+@media (max-width: 650px) {
+    .blog-grid {
+        grid-template-columns: 1fr;
     }
 
-    .post-title {
-        font-size: 22px;
+    .blog-section {
+        padding: 30px 18px 50px;
     }
 
-    .post-actions {
-        flex-direction: column;
+    .blog-heading {
+        margin-bottom: 45px;
     }
 
-    .action-btn {
-        text-align: center;
+    .blog-heading h1 {
+        font-size: 30px;
+    }
+
+    .blog-heading p {
+        margin-top: 18px;
+        font-size: 17px;
+    }
+
+    .blog-image {
+        height: 230px;
+    }
+
+    .blog-content {
+        padding: 22px 10px 0;
     }
 }

@@ -20,116 +20,61 @@ $result = mysqli_query($connection, $sql);
 
     <!-- External CSS file -->
     <link rel="stylesheet" href="postdisplay.css">
+    <link rel="stylesheet" href="header.css">
 </head>
 
 <body>
+    <?php include "header.php"; ?>
 
-    <div class="blog-container">
+    <section class="blog-section">
 
-        <h1 class="page-title">Latest Blogs</h1>
+        <div class="blog-heading">
+            <h1>Explore Our Latest Blogs</h1>
+            <p>Insights and Strategies for Digital Success</p>
+        </div>
 
-        <?php while ($row = mysqli_fetch_assoc($result)) { ?>
+        <div class="blog-grid">
 
-            <article class="post-card">
+            <?php while ($row = mysqli_fetch_assoc($result)) { ?>
 
-                <h2 class="post-title">
-                    <?php echo htmlspecialchars($row['title']); ?>
-                </h2>
+                <article class="blog-card">
 
-                <p class="post-content">
-                    <?php echo htmlspecialchars($row['content']); ?>
-                </p>
+                    <img class="blog-image"
+                         src="Image/<?php echo htmlspecialchars($row['image']); ?>"
+                         alt="<?php echo htmlspecialchars($row['title']); ?>">
 
-                <img class="post-image"
-                     src="Image/<?php echo htmlspecialchars($row['image']); ?>"
-                     alt="<?php echo htmlspecialchars($row['title']); ?>">
+                    <div class="blog-content">
 
-                <?php if (in_array($_SESSION['user_role'], ['author', 'admin'])) { ?>
+                        <h2 class="blog-title">
+                            <?php echo htmlspecialchars($row['title']); ?>
+                        </h2>
 
-                    <div class="post-actions">
+                        <p class="blog-description">
+                            <?php
+                            $content = htmlspecialchars($row['content']);
 
-                        <a class="action-btn update-btn"
-                           href="updatepost.php?post_id=<?php echo $row['id']; ?>">
-                            Update Post
-                        </a>
+                            if (strlen($content) > 130) {
+                                echo substr($content, 0, 130) . "...";
+                            } else {
+                                echo $content;
+                            }
+                            ?>
+                        </p>
 
-                        <a class="action-btn delete-btn"
-                           href="deletepost.php?post_id=<?php echo $row['id']; ?>"
-                           onclick="return confirm('Are you sure you want to delete this post?');">
-                            Delete Post
+                        <a class="learn-btn"
+                           href="singlepost.php?post_id=<?php echo $row['id']; ?>">
+                            Learn more
                         </a>
 
                     </div>
 
-                <?php } ?>
+                </article>
 
-                <form class="comment-form" action="insertcomment.php" method="POST">
+            <?php } ?>
 
-                    <input type="hidden"
-                           name="post_id"
-                           value="<?php echo $row['id']; ?>">
+        </div>
 
-                    <textarea name="comment"
-                              placeholder="Write your comment here..."
-                              required></textarea>
-
-                    <button class="comment-btn"
-                            type="submit"
-                            name="insert_comment">
-                        Post Comment
-                    </button>
-
-                </form>
-
-                <h3 class="comments-heading">Comments</h3>
-
-                <?php
-                $post_id = $row['id'];
-
-                $comment_sql = "SELECT * FROM comment
-                                WHERE post_id = '$post_id'
-                                ORDER BY id DESC";
-
-                $comment_result = mysqli_query($connection, $comment_sql);
-
-                if (mysqli_num_rows($comment_result) > 0) {
-
-                    while ($comment_row = mysqli_fetch_assoc($comment_result)) {
-                ?>
-
-                        <div class="comment-card">
-
-                            <strong class="comment-user">
-                                <?php echo htmlspecialchars($comment_row['user_name']); ?>
-                            </strong>
-
-                            <small class="comment-email">
-                                <?php echo htmlspecialchars($comment_row['email']); ?>
-                            </small>
-
-                            <p class="comment-text">
-                                <?php echo htmlspecialchars($comment_row['comment']); ?>
-                            </p>
-
-                        </div>
-
-                <?php
-                    }
-
-                } else {
-                ?>
-
-                    <p class="no-comments">
-                        No comments yet. Be the first to comment.
-                    </p>
-
-                <?php } ?>
-
-            </article>
-
-        <?php } ?>
-
-    </div>
+    </section>
 
 </body>
 </html>

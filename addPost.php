@@ -9,14 +9,13 @@ include "database.php";
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
+} else {
 
-} else { 
+    // step-2 Check the User access privilage
 
-// step-2 Check the User access privilage
-
-//Only for Admin and Author
+    //Only for Admin and Author
     if (in_array($_SESSION['user_role'], ['author', 'admin'])) {
-        $user_id = $_SESSION['user_id'];//it will help u to identity in databse which user add the post from the user id.
+        $user_id = $_SESSION['user_id']; //it will help u to identity in databse which user add the post from the user id.
 
         //Now below SQL command u do to fetch the category from the user
 
@@ -29,7 +28,7 @@ if (!isset($_SESSION['user_id'])) {
             die("Connection failed: " . $connection->connect_error);
         } else {
 
-        //store the user input of add post section 
+            //store the user input of add post section 
 
             if (isset($_POST['submit'])) {
                 $title = $_POST['title'];
@@ -40,7 +39,7 @@ if (!isset($_SESSION['user_id'])) {
                 //temp_location variable will store the address of the image
                 $temp_location = $_FILES['image']['tmp_name'];
                 $our_location = "Image/";
- 
+
                 //then i move the temp_location to our desire loacation with name.
 
                 if (!empty($image)) {
@@ -58,27 +57,28 @@ if (!isset($_SESSION['user_id'])) {
 
                 //*****************CRITICAL PART**************************
 
-               // mysqli_fetch_assoc() converts the row into an associative array
-               //This accesses the id key from the associative array. 
-               //It converts only one row at a time from the query result into an associative array.
+                // mysqli_fetch_assoc() converts the row into an associative array
+                //This accesses the id key from the associative array. 
+                //It converts only one row at a time from the query result into an associative array.
 
                 if ($impl_fetch->num_rows > 0) {
                     $row = mysqli_fetch_assoc($impl_fetch);
                     $category_id = $row['id'];
+                } else {
+                    die("Category not found");
                 }
 
-                else {
-                        die("Category not found");
-                    }
-
-//Get all the data and store into the database
+                //Get all the data and store into the database
 
                 $user_submission = "INSERT INTO post(title, content, image,  category_id,    author_id) VALUES('$title','$description','$image','$category_id', '$user_id')";
 
                 $impl_submission = mysqli_query($connection, $user_submission);
 
                 if ($impl_submission) {
-                    echo "Post Uploaded SuccessFully";
+                    header("Location: postdisplay.php");
+                    exit();
+                } else {
+                    echo "Post upload failed: " . $connection->error;
                 }
             }
         }
@@ -99,9 +99,11 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add_Post</title>
     <link href="addpost.css" rel="stylesheet">
+    <link rel="stylesheet" href="header.css">
 </head>
 
 <body>
+    <?php include "header.php"; ?>
 
     <main class="add-post-page">
 
@@ -120,9 +122,9 @@ if (!isset($_SESSION['user_id'])) {
             <?php } ?>
 
             <form class="add-post-form"
-                  action="addPost.php"
-                  method="post"
-                  enctype="multipart/form-data">
+                action="addPost.php"
+                method="post"
+                enctype="multipart/form-data">
 
                 <div class="form-group">
                     <label for="title">Post title</label>
@@ -131,8 +133,7 @@ if (!isset($_SESSION['user_id'])) {
                         id="title"
                         name="title"
                         placeholder="Enter a clear post title"
-                        required
-                    >
+                        required>
                 </div>
 
                 <div class="form-group">
@@ -141,8 +142,7 @@ if (!isset($_SESSION['user_id'])) {
                         id="description"
                         name="description"
                         placeholder="Write your post content here..."
-                        required
-                    ></textarea>
+                        required></textarea>
                 </div>
 
                 <div class="form-group">
@@ -167,8 +167,7 @@ if (!isset($_SESSION['user_id'])) {
                         type="file"
                         id="image"
                         name="image"
-                        accept="image/*"
-                    >
+                        accept="image/*">
 
                     <small class="file-help">
                         Upload a JPG, PNG, or WEBP image.
@@ -186,4 +185,5 @@ if (!isset($_SESSION['user_id'])) {
     </main>
 
 </body>
+
 </html>

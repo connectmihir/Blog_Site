@@ -29,11 +29,12 @@ if (isset($_POST['Register'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Account</title>
-
+<link rel="stylesheet" href="header.css">
     <link rel="stylesheet" href="register.css">
 </head>
 
 <body>
+    <?php include "header.php"; ?>
 
     <main class="register-page">
 
