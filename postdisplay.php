@@ -1,33 +1,14 @@
 <?php
-
-use LDAP\Result;
-
 session_start();
-
-
-
 include "database.php";
 
-if(isset($_SESSION['user_name'])){
-    $user_name=$_SESSION['user_name'];
-}
-
-else{
+if (!isset($_SESSION['user_name'])) {
     header("location: dashboard.php");
     exit();
 }
 
-$sql= "select * from post";
-
-$Result= mysqli_query($connection, $sql);
-
-while($row= mysqli_fetch_assoc($Result)){
-    echo"{$row['title']}<br>";
-    echo"{$row['content']}<br>";
-    echo"<img src='Image/{$row['image']}'><br><hr>";
- }
-
-
+$sql = "SELECT * FROM post";
+$result = mysqli_query($connection, $sql);
 ?>
 
 <!DOCTYPE html>
@@ -39,9 +20,16 @@ while($row= mysqli_fetch_assoc($Result)){
 </head>
 <body>
 
-<form action="insertcomment.php?user_name=$user_name">
+<?php while ($row = mysqli_fetch_assoc($result)) { ?>
 
-<input type="hidden" name="post_id" value="<?php echo $row['id']; ?>">
+    <h2><?php echo $row['title']; ?></h2>
+
+    <p><?php echo $row['content']; ?></p>
+
+    <img src="Image/<?php echo $row['image']; ?>" width="300">
+
+    <br><br>
+
     <?php if (in_array($_SESSION['user_role'], ['author', 'admin'])) { ?>
 
         <a href="updatepost.php?post_id=<?php echo $row['id']; ?>">
@@ -58,15 +46,25 @@ while($row= mysqli_fetch_assoc($Result)){
 
     <?php } ?>
 
+    <form action="insertcomment.php" method="POST">
 
-<textarea name="comment" placeholder="We love to hear you and learn from you!!">
+        <input type="hidden" name="post_id" value="<?php echo $row['id']; ?>">
 
-</textarea>
+        <textarea name="comment"
+                  placeholder="We love to hear from you and learn from you!"
+                  required></textarea>
 
-<button id="InsComment" 
-        name="insert_comment">Insert Comment</button>
+        <br>
+
+        <button type="submit" name="insert_comment">
+            Insert Comment
+        </button>
 
     </form>
-    
+
+    <hr>
+
+<?php } ?>
+
 </body>
 </html>
