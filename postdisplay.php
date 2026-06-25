@@ -4,6 +4,8 @@ use LDAP\Result;
 
 session_start();
 
+
+
 include "database.php";
 
 if(isset($_SESSION['user_name'])){
@@ -26,7 +28,6 @@ while($row= mysqli_fetch_assoc($Result)){
  }
 
 
-
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +39,7 @@ while($row= mysqli_fetch_assoc($Result)){
 </head>
 <body>
 
-<form action="postdisplay.php?user_name=$user_name">
+<form action="insertcomment.php?user_name=$user_name">
 
 <input type="hidden" name="post_id" value="<?php echo $row['id']; ?>">
     <?php if (in_array($_SESSION['user_role'], ['author', 'admin'])) { ?>
@@ -62,8 +63,8 @@ while($row= mysqli_fetch_assoc($Result)){
 
 </textarea>
 
-<button id="login" 
-        name="insert_comment" >Insert Comment</button>
+<button id="InsComment" 
+        name="insert_comment">Insert Comment</button>
 
     </form>
     
