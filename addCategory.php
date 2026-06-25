@@ -1,62 +1,30 @@
-<?php
+<?php 
 session_start();
 include "database.php";
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['user_role'])) { 
     header("Location: login.php");
     exit();
 }
 
-if ($_SESSION['user_role'] !== "admin") {
+if ($_SESSION['user_role'] != "admin") {
     header("Location: dashboard.php");
     exit();
 }
 
-$success_message = "";
-$error_message = "";
+$message = "";
 
-/* Add category */
 if (isset($_POST['submit'])) {
 
-    $name = trim($_POST['name']);
+    $name = $_POST['name'];
 
-    if (empty($name)) {
-        $error_message = "Please enter a category name.";
+    $sql = "INSERT INTO categories(name) VALUES ('$name')";
+    $result = mysqli_query($connection, $sql);
+
+    if (!$result) {
+        $message = "Error: " . $connection->error;
     } else {
-
-        /* Check whether category already exists */
-        $check_sql = "SELECT * FROM categories WHERE name='$name'";
-        $check_result = mysqli_query($connection, $check_sql);
-
-        if (mysqli_num_rows($check_result) > 0) {
-            $error_message = "This category already exists.";
-        } else {
-
-            $sql = "INSERT INTO categories(name) VALUES ('$name')";
-            $result = mysqli_query($connection, $sql);
-
-            if (!$result) {
-                $error_message = "Error: " . $connection->error;
-            } else {
-                $success_message = "Category added successfully.";
-            }
-        }
-    }
-}
-
-/* Delete category */
-if (isset($_GET['delete_id'])) {
-
-    $delete_id = $_GET['delete_id'];
-
-    $delete_sql = "DELETE FROM categories WHERE id='$delete_id'";
-    $delete_result = mysqli_query($connection, $delete_sql);
-
-    if ($delete_result) {
-        header("Location: category.php");
-        exit();
-    } else {
-        $error_message = "Category cannot be deleted because it may be connected to a post.";
+        $message = "Category added successfully.";
     }
 }
 
@@ -85,96 +53,63 @@ $category_result = mysqli_query($connection, $category_sql);
     <section class="category-container">
 
         <div class="category-heading">
-            <p class="page-tag">BLOG MANAGEMENT</p>
+            <p class="page-tag">ADMIN PANEL</p>
             <h1>Manage Categories</h1>
-            <p>Add categories to organise your blog posts properly.</p>
+            <p>Add or remove categories for blog posts.</p>
         </div>
 
-        <?php if ($success_message != "") { ?>
-            <div class="success-message">
-                <?php echo $success_message; ?>
-            </div>
+        <?php if ($message != "") { ?>
+            <p class="message"><?php echo $message; ?></p>
         <?php } ?>
 
-        <?php if ($error_message != "") { ?>
-            <div class="error-message">
-                <?php echo $error_message; ?>
-            </div>
-        <?php } ?>
+        <form method="POST" class="category-form">
 
-        <div class="category-grid">
+            <input 
+                type="text" 
+                name="name" 
+                placeholder="Enter category name"
+                required
+            >
 
-            <section class="add-category-card">
+            <button type="submit" name="submit">
+                Add Category
+            </button>
 
-                <h2>Add New Category</h2>
+        </form>
 
-                <form method="POST" class="category-form">
+        <section class="category-list">
 
-                    <label for="name">Category name</label>
+            <h2>All Categories</h2>
 
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        placeholder="Example: Technology"
-                        required
-                    >
+            <?php if (mysqli_num_rows($category_result) > 0) { ?>
 
-                    <button type="submit" name="submit">
-                        Add Category
-                    </button>
+                <?php while ($category = mysqli_fetch_assoc($category_result)) { ?>
 
-                </form>
+                    <div class="category-item">
 
-            </section>
+                        <span>
+                            <?php echo htmlspecialchars($category['name']); ?>
+                        </span>
 
-            <section class="category-list-card">
-
-                <div class="list-heading">
-                    <h2>Existing Categories</h2>
-                    <span>
-                        <?php echo mysqli_num_rows($category_result); ?> Categories
-                    </span>
-                </div>
-
-                <?php if (mysqli_num_rows($category_result) > 0) { ?>
-
-                    <div class="category-list">
-
-                        <?php while ($row = mysqli_fetch_assoc($category_result)) { ?>
-
-                            <div class="category-item">
-
-                                <div class="category-name">
-                                    <span class="category-icon">#</span>
-                                    <?php echo htmlspecialchars($row['name']); ?>
-                                </div>
-
-                                <a
-                                    class="delete-category"
-                                    href="category.php?delete_id=<?php echo $row['id']; ?>"
-                                    onclick="return confirm('Are you sure you want to delete this category?');"
-                                >
-                                    Delete
-                                </a>
-
-                            </div>
-
-                        <?php } ?>
+                        <a 
+                            class="delete-category-btn"
+                            href="deletecategory.php?id=<?php echo $category['id']; ?>"
+                            onclick="return confirm('Are you sure you want to delete this category?');"
+                        >
+                            Delete
+                        </a>
 
                     </div>
 
-                <?php } else { ?>
-
-                    <p class="empty-category">
-                        No categories found. Add your first category.
-                    </p>
-
                 <?php } ?>
 
-            </section>
+            <?php } else { ?>
 
-        </div>
+                <p>No categories found.</p>
+
+            <?php } ?>
+
+        </section>
 
     </section>
 
