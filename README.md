@@ -1,6 +1,6 @@
 # BlogSpace – PHP Blog Management System
 
-BlogSpace is a simple Blog Management System built using PHP, MySQL, HTML, and CSS.
+## BlogSpace is a simple Blog Management System built using PHP, MySQL, HTML, and CSS.
 
 The project allows users to register, log in, create blog posts, manage categories, upload images, and add comments to posts.
 
