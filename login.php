@@ -2,6 +2,9 @@
 session_start();
 include "database.php";
 
+//i have to work on hashing and SQL injections
+
+
 $error_message = "";
 
 if (isset($_POST['login'])) {

@@ -30,6 +30,7 @@ Repo link: https://github.com/connectmihir/Blog_Site
 * Responsive User Interface
 * Logout System
 * MySQL Database Integration
+* I am working on the MYSQL injection prevention so that i can improve effeciency.
 
 ## User Roles
 
